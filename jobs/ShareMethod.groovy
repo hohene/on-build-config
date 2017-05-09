@@ -59,28 +59,16 @@ def buildImages(String repo_dir){
     // retry times for images build to avoid failing caused by network
     int retry_times = 3
     stage("Images Build"){
-        parallel 'vagrant build':{
-            retry(retry_times){
-                load(repo_dir + "/jobs/build_vagrant/build_vagrant.groovy")
-            }
-        }, 'ova build':{
+        parallel 'ova build':{
             retry(retry_times){
                 load(repo_dir + "/jobs/build_ova/build_ova.groovy")
-            }
-        }, 'build docker':{
-            retry(retry_times){
-                load(repo_dir + "/jobs/build_docker/build_docker.groovy")
             }
         }
     }
 
     stage("Post Test"){
-        parallel 'vagrant post test':{
-            load(repo_dir + "/jobs/build_vagrant/vagrant_post_test.groovy")
-        }, 'ova post test loader':{
+        parallel 'ova post test loader':{
             load(repo_dir + "/jobs/build_ova/ova_post_test.groovy")
-        }, 'docker post test loader':{
-            load(repo_dir + "/jobs/build_docker/docker_post_test.groovy")
         }
     }
 }
