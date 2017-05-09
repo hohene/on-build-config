@@ -54,9 +54,7 @@ node{
                 def manifest_name=env.MANIFEST_FILE_URL.tokenize('/')[-1];
             }
             stage("post post DO"){
- `
                 currentBuild.description = "<a href=${env.MANIFEST_FILE_URL}>${manifest_name}</a>";
- 
                 shareMethod.downloadManifest(env.MANIFEST_FILE_URL, manifest_name)
 
                 stash name: "masterci_manifest", includes: "${manifest_name}"
