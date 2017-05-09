@@ -49,6 +49,8 @@ node{
                     sh 'curl -L $MANIFEST_FILE_URL -o manifest'
                 }
                 // back to master-ci orig
+            }
+            stage("POST Manifest DO"){
                 def manifest_name=env.MANIFEST_FILE_URL.tokenize('/')[-1];
                 currentBuild.description = "<a href=${env.MANIFEST_FILE_URL}>${manifest_name}</a>";
  
