@@ -25,8 +25,6 @@ node(build_debian_node){
                     sh './on-build-config/jobs/build_debian/build_debian.sh'
                 }
 
-                sh './on-build-config/jobs/build_debian/build_debian.sh'
-
                 // inject properties file as environment variables
                 if(fileExists ("downstream_file")) {
                     def props = readProperties file: "downstream_file"
