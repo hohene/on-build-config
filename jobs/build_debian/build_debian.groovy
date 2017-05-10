@@ -17,13 +17,13 @@ node(build_debian_node){
                 }
 
                 // credentials are binding to Jenkins Server
-//                withCredentials([
-//                     usernameColonPassword(credentialsId: "ff7ab8d2-e678-41ef-a46b-dd0e780030e1", 
-//                                           variable: "SUDO_CREDS"),
-//                    usernameColonPassword(credentialsId: "a94afe79-82f5-495a-877c-183567c51e0b", 
-//                                          variable:"BINTRAY_CREDS")]){
-//                    sh './on-build-config/jobs/build_debian/build_debian.sh'
-//                }
+                withCredentials([
+                    usernameColonPassword(credentialsId: "ff7ab8d2-e678-41ef-a46b-dd0e780030e1",
+                                          variable: "SUDO_CREDS"),
+                    usernameColonPassword(credentialsId: "a94afe79-82f5-495a-877c-183567c51e0b",
+                                          variable:"BINTRAY_CREDS")]){
+                    sh './on-build-config/jobs/build_debian/build_debian.sh'
+                }
 
                 sh './on-build-config/jobs/build_debian/build_debian.sh'
 
