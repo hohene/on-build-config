@@ -58,13 +58,13 @@ def buildPackage(String repo_dir){
 def buildImages(String repo_dir){
     // retry times for images build to avoid failing caused by network
     int retry_times = 3
-    // stage("Images Build"){
-    //    parallel 'ova build':{
-    //        retry(retry_times){
-    //            load(repo_dir + "/jobs/build_ova/build_ova.groovy")
-    //        }
-    //    }
-    // }
+    stage("Images Build"){
+        parallel 'ova build':{
+            retry(retry_times){
+                load(repo_dir + "/jobs/build_ova/build_ova.groovy")
+            }
+        }
+    }
 
     stage("Post Test"){
         parallel 'ova post test loader':{
@@ -94,16 +94,16 @@ def createTag(String repo_dir){
 }
 
 def buildAndPublish(Boolean publish, Boolean tag, String repo_dir){
-    // buildPackage(repo_dir)
+    buildPackage(repo_dir)
 
     buildImages(repo_dir)
 
-    // if(tag){
-    //    createTag(repo_dir)
-    // }
-    // if(publish){
-    //    publishImages(repo_dir)
-    // }
+    if(tag){
+        createTag(repo_dir)
+    }
+    if(publish){
+        publishImages(repo_dir)
+    }
 }
 
 def sendResult(boolean sendJenkinsBuildResults, boolean sendTestResults){
