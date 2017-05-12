@@ -18,7 +18,50 @@ node{
         checkout scm
         def shareMethod = load("jobs/ShareMethod.groovy")
         try{
-            stage("Try the Post Test OVA"){
+            stage("Generate Manifest"){
+                // Generate a manifest file according to the branch, date and timezone parameters if manifest file url is null
+                if("${MANIFEST_FILE_URL}" == null || "${MANIFEST_FILE_URL}" == "null" || "${MANIFEST_FILE_URL}" == ""){
+                    timestamps{
+                        withEnv([
+                            "branch=${env.branch}",
+                            "date=current",
+                            "timezone=-0500"
+                        ]){
+                            sh '''#!/bin/bash -ex
+                            pushd $WORKSPACE
+                            ./build-config/build-release-tools/HWIMO-BUILD build-config/build-release-tools/application/generate_manifest.py \
+                            --branch "$branch" \
+                            --date "$date" \
+                            --timezone "$timezone" \
+                            --builddir b \
+                            --force \
+                            --jobs 8
+
+                            arrBranch=($(echo $branch | tr "/" "\n"))
+                            slicedBranch=${arrBranch[-1]}
+                            manifest_file=$(find -maxdepth 1 -name "$slicedBranch-[0-9]*" -printf "%f\n")
+                            mv $manifest_file manifest
+                            '''
+                        }
+                    }
+                }
+                else{
+                    sh 'curl -L $MANIFEST_FILE_URL -o manifest'
+                }
+                // back to master-ci orig
+            }
+            stage("POST Manifest DO"){
+                // def manifest_name=env.MANIFEST_FILE_URL.tokenize('/')[-1];
+                // currentBuild.description = "<a href=${MANIFEST_FILE_URL}>${manifest_name}</a>";
+                // shareMethod.downloadManifest(MANIFEST_FILE_URL, manifest_name)
+
+                // stash name: "masterci_manifest", includes: "${manifest_name}"
+                stash name: "masterci_manifest", includes: "manifest"
+                env.stash_manifest_name = "masterci_manifest"
+                // env.stash_manifest_path = "${manifest_name}"
+                env.stash_manifest_path = "manifest"
+            }
+            stage("post post EH"){
                 def repo_dir = pwd()
                 def TESTS = "${env.TESTS}"
                 def test_type = "manifest"
