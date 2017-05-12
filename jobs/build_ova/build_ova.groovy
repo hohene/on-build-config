@@ -35,7 +35,8 @@ node(build_ova_node){ws{
                 stash name: 'ova', includes: 'build/packer/*.ova'
                 env.OVA_WORKSPACE="${current_workspace}"
                 env.OVA_STASH_NAME="ova"
-                env.OVA_PATH="build/packer/*.ova"
+                // env.OVA_PATH="build/packer/*.ova"
+                env.OVA_PATH="/tmp/*.ova"
             }
         }
     }
