@@ -66,6 +66,7 @@ waitForAPI() {
 
 configOVA() {
   # config the OVA for post test
+  sleep 120
   pushd ${WORKSPACE}/build-config/jobs/build_ova/ansible
     echo "ova-post-test ansible_host=$OVA_INTERNAL_IP ansible_user=$OVA_USER ansible_ssh_pass=$OVA_PASSWORD ansible_become_pass=$OVA_PASSWORD" > hosts
     cp -f ${WORKSPACE}/build-config/vagrant/config/mongo/config.json .
