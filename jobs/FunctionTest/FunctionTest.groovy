@@ -121,11 +121,15 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                                 ./build-config
                                 popd
                                 '''
+                                echo "Test Type ${test_type}"
+                                
+
                                 // next steps must run after above steps
                                 if(test_type == "ova"){
                                     // env vars in this sh are defined in jobs/build_ova/ova_post_test.groovy
                                     unstash "$ova_stash_name"
                                     env.OVA_PATH = "$ova_stash_path"
+                                    echo "OVA PATH: ${env.OVA_PATH}"
                                     sh './build-config/jobs/build_ova/prepare_ova_post_test.sh'
                                 }
 
