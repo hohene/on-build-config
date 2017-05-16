@@ -7,9 +7,11 @@
 #   2. Gateway, connect to external net through $OVA_NET_INTERFACE(eth1) with $OVA_GATEWAY IP
 
 set -x
+echo "Post Test starts "
+
 OVA=`ls ${OVA_PATH}`
 
-echo "Post Test starts "
+echo "OVA ${OVA}"
 
 deployOva() {
     if [ -n "${External_vSwitch}" ]; then
