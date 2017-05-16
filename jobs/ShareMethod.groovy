@@ -58,13 +58,13 @@ def buildPackage(String repo_dir){
 def buildImages(String repo_dir){
     // retry times for images build to avoid failing caused by network
     int retry_times = 3
-    stage("Images Build"){
-        parallel 'ova build':{
-            retry(retry_times){
-                load(repo_dir + "/jobs/build_ova/build_ova.groovy")
-            }
-        }
-    }
+    // stage("Images Build"){
+    //    parallel 'ova build':{
+    //        retry(retry_times){
+    //            load(repo_dir + "/jobs/build_ova/build_ova.groovy")
+    //        }
+    //    }
+    // }
 
     stage("Post Test"){
         parallel 'ova post test loader':{
