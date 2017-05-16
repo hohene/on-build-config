@@ -128,10 +128,15 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                                 if(test_type == "ova"){
                                     // env vars in this sh are defined in jobs/build_ova/ova_post_test.groovy
                                     echo "Inside OVA test - call prepare_ova_post_test.sh"
+                                    // stash name: 'ova', includes: 'build/packer/*.ova'
+                                    stash name: 'ova', includes: '/home/jenkins/jeanne-build/*.ova'
                                     unstash "$ova_stash_name"
-                                    env.OVA_PATH = "$ova_stash_path"
+                                    echo "ova_stash_name: ${ova_stash_name}"
+                                    // env.OVA_PATH = "$ova_stash_path"
+                                    env.OVA_PATH = "/home/jenkins/jeanne-build/*.ova"
                                     echo "OVA PATH: ${env.OVA_PATH}"
                                     sh './build-config/jobs/build_ova/prepare_ova_post_test.sh'
+                                    echo "done calling prepare_ova_post_test"
                                 }
 
                                 if(test_type == "docker"){
