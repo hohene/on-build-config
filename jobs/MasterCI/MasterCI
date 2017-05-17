@@ -75,7 +75,6 @@ node{
 		else{
                     shareMethod.buildAndPublish(publish, create_tag, repo_dir)
 		}
-
             }
         } finally{
             shareMethod.sendResult(false, false)
