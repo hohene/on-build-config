@@ -75,6 +75,7 @@ def buildImages(String repo_dir){
     }
 
     testOVA(repo_dir)
+}
 
 def publishImages(String repo_dir){
     stage("Publish"){
