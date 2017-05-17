@@ -132,7 +132,7 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                                     if (env.USE_PREBUILT_OVA == "true") {
                                         env.OVA_PATH = "/home/jenkins/jeanne-build/*.ova"
                                     } else {
-                                        stash name: 'ova', includes: 'build/packer/*.ova'
+                                        // stash name: 'ova', includes: 'build/packer/*.ova'
                                         unstash "$ova_stash_name"
                                         env.OVA_PATH = "$ova_stash_path"
                                     }
