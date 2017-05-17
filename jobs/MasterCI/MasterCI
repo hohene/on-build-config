@@ -69,7 +69,13 @@ node{
                 Boolean create_tag = false
                 // Boolean publish = PUBLISH.toBoolean()
                 Boolean publish = false
-                shareMethod.buildAndPublish(publish, create_tag, repo_dir)
+		if(env.USE_PREBUILT_OVA){
+                    shareMethod.testOVA(repo_dir)
+                }
+		else{
+                    shareMethod.buildAndPublish(publish, create_tag, repo_dir)
+		}
+
             }
         } finally{
             shareMethod.sendResult(false, false)
