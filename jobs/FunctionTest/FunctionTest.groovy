@@ -128,7 +128,7 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                                 if(test_type == "ova"){
                                     // env vars in this sh are defined in jobs/build_ova/ova_post_test.groovy
                                     echo "Inside OVA test - call prepare_ova_post_test.sh"
-                                    stash name: 'ova', includes: 'build/packer/*.ova'
+                                    // stash name: 'ova', includes: 'build/packer/*.ova'
                                     // stash name: 'ova', includes: '/home/jenkins/jeanne-build/*.ova'
                                     echo "stashed ova"
                                     // echo "unstashing ova_stash_name: ${ova_stash_name}"
