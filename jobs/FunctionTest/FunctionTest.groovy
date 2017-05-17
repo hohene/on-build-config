@@ -134,7 +134,7 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                                         stash name: 'ova', includes: 'build/packer/*.ova'
                                         unstash "$ova_stash_name"
                                         env.OVA_PATH = "$ova_stash_path"
-                                    }
+                                    };
                                     echo "OVA PATH: ${env.OVA_PATH}"
                                     sh './build-config/jobs/build_ova/prepare_ova_post_test.sh'
                                     echo "done calling prepare_ova_post_test"
