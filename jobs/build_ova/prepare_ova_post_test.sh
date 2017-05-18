@@ -7,9 +7,11 @@
 #   2. Gateway, connect to external net through $OVA_NET_INTERFACE(eth1) with $OVA_GATEWAY IP
 
 set -x
+echo "Post Test starts "
+
 OVA=`ls ${OVA_PATH}`
 
-echo "Post Test starts "
+echo "OVA ${OVA}"
 
 deployOva() {
     if [ -n "${External_vSwitch}" ]; then
@@ -66,13 +68,14 @@ waitForAPI() {
 
 configOVA() {
   # config the OVA for post test
+  sleep 120
   pushd ${WORKSPACE}/build-config/jobs/build_ova/ansible
     echo "ova-post-test ansible_host=$OVA_INTERNAL_IP ansible_user=$OVA_USER ansible_ssh_pass=$OVA_PASSWORD ansible_become_pass=$OVA_PASSWORD" > hosts
     cp -f ${WORKSPACE}/build-config/vagrant/config/mongo/config.json .
     ansible-playbook -i hosts main.yml --tags "before-test"
-    if [ -z "${External_vSwitch}" ]; then
-      ansible-playbook -i hosts main.yml --extra-vars "ova_gateway=$OVA_GATEWAY ova_net_interface=$OVA_NET_INTERFACE" --tags "config-gateway"
-    fi
+    # if [ -z "${External_vSwitch}" ]; then
+    #  ansible-playbook -i hosts main.yml --extra-vars "ova_gateway=$OVA_GATEWAY ova_net_interface=$OVA_NET_INTERFACE" --tags "config-gateway"
+    # fi
   popd
 }
 
