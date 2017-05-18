@@ -128,9 +128,6 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                                 if(test_type == "ova"){
                                     // env vars in this sh are defined in jobs/build_ova/ova_post_test.groovy
                                     echo "Inside OVA test - call prepare_ova_post_test.sh"
-                                    echo "1 Inside OVA test - call prepare_ova_post_test.sh"
-                                    echo "2 Inside OVA test - call prepare_ova_post_test.sh"
-                                    echo "3 Inside OVA test - call prepare_ova_post_test.sh"
                                     if (env.USE_PREBUILT_OVA == "true") {
                                         env.OVA_PATH = "/home/jenkins/jeanne-build/*.ova"
                                     } else {
