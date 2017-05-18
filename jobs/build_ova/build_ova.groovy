@@ -40,9 +40,10 @@ lock("ova_build"){
                     def branch = "${env.RACKHD_COMMIT}"
                     def targetDir = "build"
                     shareMethod.checkout(url, branch, targetDir)
-                    step ([$class: 'CopyArtifact',
-                    projectName: 'OVA_CACHE_BUILD',
-                    target: 'cache_image']);
+                    // Not performing the copy as packer_ova set up on same slave node
+                    // step ([$class: 'CopyArtifact',
+                    // projectName: 'OVA_CACHE_BUILD',
+                    // target: 'cache_image']);
 
                     timeout(180){
                         withEnv(["WORKSPACE=${current_workspace}"]){
