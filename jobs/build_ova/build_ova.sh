@@ -1,9 +1,12 @@
 #!/bin/bash -x
 
 set +e
-mkdir $WORKSPACE/cache_image/RackHD/packer
-mv $WORKSPACE/cache_image/RackHD/packer/* $WORKSPACE/build/packer/
-ls $WORKSPACE/build/packer/*
+if [ -d  $WORKSPACE/cache_image/RackHD/packer/ ] ; then
+    echo "Copy Cache images from PACKER_CACHE_BUILD job archiving"
+    mv $WORKSPACE/cache_image/RackHD/packer/* $WORKSPACE/build/packer/
+    ls $WORKSPACE/build/packer/*
+fi
+
 vmware -v
 
 cd $WORKSPACE/build/packer/ansible/roles/rackhd-builds/tasks
@@ -14,10 +17,6 @@ pkill packer
 pkill vmware
 
 set -e
-export PACKER_CACHE_DIR=/home/jenkins/.packer_cache
-PACKER_CACHE_DIR=/home/jenkins/.packer_cache
-export "BUILD_TYPE"=vmware
-
 cd $WORKSPACE/build/packer
 #export vars to build ova
 if [ "${IS_OFFICIAL_RELEASE}" == true ]; then
@@ -26,15 +25,13 @@ else
     export ANSIBLE_PLAYBOOK=rackhd_ci_builds
 fi
 
-#if [ "$BUILD_TYPE" == "vmware" ] &&  [ -f output-vmware-iso/*.vmx ]; then
-#     echo "Build from template cache"
-#     export BUILD_STAGE=BUILD_FINAL
-#else
-
-echo "Build from begining"
-export BUILD_STAGE=BUILD_ALL
-
-#fi
+if [ "$BUILD_TYPE" == "vmware" ] &&  [ -f output-vmware-iso/*.vmx ]; then
+     echo "Build from template cache"
+     export BUILD_STAGE=BUILD_FINAL
+else
+     echo "Build from begining"
+     export BUILD_STAGE=BUILD_ALL
+fi
 
 export RACKHD_VERSION=$RACKHD_VERSION
 #export end
