@@ -36,8 +36,10 @@ lock("ova_build"){
                     dir("on-build-config"){
                         checkout scm
                     }
-                    def url = "https://github.com/RackHD/RackHD.git"
+                    // def url = "https://github.com/RackHD/RackHD.git"
+                    def url = "https://github.com/hohene/RackHD.git"
                     def branch = "${env.RACKHD_COMMIT}"
+                    // def branch = "rac-5026-rackhd-branch1"
                     def targetDir = "build"
                     shareMethod.checkout(url, branch, targetDir)
                     // Not performing the copy as packer_ova set up on same slave node
