@@ -40,7 +40,8 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
     def shareMethod = load(repo_dir + "/jobs/ShareMethod.groovy")
     lock(label:label_name,quantity:1){
         // Occupy an avaliable resource which contains the label
-        String node_name = shareMethod.occupyAvailableLockedResource(label_name, this.used_resources)
+        // String node_name = shareMethod.occupyAvailableLockedResource(label_name, this.used_resources)
+        String node_name = "vmslave08" 
         try{
             node(node_name){
                 deleteDir()
