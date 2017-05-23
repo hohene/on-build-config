@@ -40,6 +40,7 @@ deployOva() {
         exit 3
     fi
     # OVA_INTERNAL_IP, eth1 IP of ova
+    echo "OVA_INTERNAL_IP: $OVA_INTERNAL_IP"
     ssh-keygen -f "$HOME/.ssh/known_hosts" -R $OVA_INTERNAL_IP
 }
 
