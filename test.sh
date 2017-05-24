@@ -289,6 +289,8 @@ if [ "$RUN_CIT_TEST" == true ] || [ "$RUN_FIT_TEST" == true ] ; then
   generateSolLog
   # Run tests
   runTests
+  echo "sleep for debug"
+  sleep 7200
 
   # Clean Up below
 
