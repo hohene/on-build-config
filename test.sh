@@ -226,6 +226,7 @@ runTests() {
          echo "Test FIT failed running smoke test"
          exit 1
      fi
+     sleep 7200
      mkdir -p ${WORKSPACE}/xunit-reports
      cp *.xml ${WORKSPACE}/xunit-reports
   fi
