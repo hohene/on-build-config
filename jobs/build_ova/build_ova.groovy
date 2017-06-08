@@ -37,7 +37,7 @@ lock("ova_build"){
                     dir("on-build-config"){
                         checkout scm
                     }
-                    def url = "https://github.com/RackHD/RackHD.git"
+                    def url = "https://github.com/larry-dean/RackHD.git"
                     def branch = "${env.RACKHD_COMMIT}"
                     def targetDir = "build"
                     shareMethod.checkout(url, branch, targetDir)
