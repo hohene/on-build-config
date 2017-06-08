@@ -12,11 +12,9 @@ node{
         "OVA_POST_TESTS=${env.OVA_POST_TESTS}",
         "BINTRAY_SUBJECT=${env.BINTRAY_SUBJECT}",
         "CI_BINTRAY_SUBJECT=${env.CI_BINTRAY_SUBJECT}",
-        "PUBLISH=${env.PUBLISH}"
+        "PUBLISH=${env.PUBLISH}",
+        "OVA_CACHE_BUILD=true"
     ]){
-        def message = "Job Name: ${env.JOB_NAME} \n" + "Build Full URL: ${env.BUILD_URL} \n" + "Phase: STARTED \n"
-        echo "$message"
-        slackSend "$message"
         deleteDir()
         checkout scm
         def shareMethod = load("jobs/ShareMethod.groovy")
@@ -57,15 +55,6 @@ node{
             Boolean create_tag = false
             Boolean publish = PUBLISH.toBoolean()
             shareMethod.buildAndPublish(publish, create_tag, repo_dir)
-            // trigger unfreeze procedure
-            try {
-                build job: env.MERGE_FREEZER_TRIGGER, parameters: [[$class: 'StringParameterValue', name: 'MANUAL', value:"false"],[$class: 'BooleanParameterValue', name: 'FREEZE_OR_UNFREEZE', value:false]]
-            } catch (error){
-                echo "Failed to trigger merge freezer!"
-            }
-        } catch(error){
-            // trigger freeze procedure
-            build job: env.MERGE_FREEZER_TRIGGER, parameters: [[$class: 'StringParameterValue', name: 'MANUAL', value:"false"],[$class: 'BooleanParameterValue', name: 'FREEZE_OR_UNFREEZE', value:true]]
         } finally{
             shareMethod.sendResult(true, true)
         }
