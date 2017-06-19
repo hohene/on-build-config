@@ -126,6 +126,23 @@ def buildandtestOVA(String repo_dir){
     }
 }
 
+def buildandtestDocker(String repo_dir){
+    // retry times for images build to avoid failing caused by network
+    int retry_times = 3
+
+    buildPackage(repo_dir)
+
+    stage("Docker Images Build"){
+        retry(retry_times){
+            buildDocker(repo_dir)
+        }
+    }
+
+    stage("Docker Post Test"){
+        testDocker(repo_dir)
+    }
+}
+
 def publishImages(String repo_dir){
     stage("Publish"){
         parallel 'Publish Debian':{
@@ -166,9 +183,6 @@ def sendResult(boolean sendJenkinsBuildResults, boolean sendTestResults){
                 currentBuild.result = "SUCCESS"
             }
             step([$class: 'VTestResultsAnalyzerStep', sendJenkinsBuildResults: sendJenkinsBuildResults, sendTestResults: sendTestResults])
-            def message = "Job Name: ${env.JOB_NAME} \n" + "Build Full URL: ${env.BUILD_URL} \n" + "Status: " + currentBuild.result + "\n"
-            echo "$message"
-            slackSend "$message"
         } catch(error){
             echo "Caught: ${error}"
         }

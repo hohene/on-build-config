@@ -21,6 +21,7 @@ IS_OFFICIAL_RELEASE=${IS_OFFICIAL_RELEASE:=false}
 
 BUILD_NIGHTLY=false
 BUILD_LATEST=false
+BUILD_POSTTEST=true
 
 tagCalculate() {
     repo=$1
@@ -67,6 +68,8 @@ doBuild() {
             PKG_TAG=""
             if [ "$BUILD_NIGHTLY" == true ]; then
                 TAG=:nightly
+            elif [ "$BUILD_POSTTEST" == true ]; then
+                TAG=:posttest
             elif [ "$BUILD_LATEST" != true ]; then
                 tagCalculate $repo
                 TAG=:${PKG_TAG}
@@ -94,7 +97,6 @@ doBuild() {
             mv ../Dockerfile.bak Dockerfile
         popd
     done
-
     # write build list to a file for guiding image push. 
     pushd $WORKDIR
     echo "Imagename:tag list of this build is $repos_tags"
@@ -123,8 +125,10 @@ if [[ "$IS_OFFICIAL_RELEASE" == true ]];then
     doBuild
 else
     # nightly tag is for nightly build.
-    BUILD_NIGHTLY=true
-    doBuild
+    if [[ "$BUILD_POSTTEST" == false ]];then
+        BUILD_NIGHTLY=true
+        doBuild
+    fi
 fi
 # Build ends
 popd
