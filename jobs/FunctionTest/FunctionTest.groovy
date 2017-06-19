@@ -2,11 +2,10 @@ import groovy.transform.Field;
 
 // The default test config: ALL_TESTS (a global variable)
 @Field def ALL_TESTS=[:]
-ALL_TESTS["FIT"]=["TEST_GROUP":"-test tests -group smoke","RUN_FIT_TEST":true,"RUN_CIT_TEST":false,"label":"smoke_test", "EXTRA_HW":"ucs"]
-ALL_TESTS["CIT"]=["TEST_GROUP":"smoke-tests","RUN_FIT_TEST":false,"RUN_CIT_TEST":true,"label":"smoke_test", "EXTRA_HW":""]
-ALL_TESTS["Install Ubuntu 14.04"]=["TEST_GROUP":"ubuntu-minimal-install.v2.0.test","RUN_FIT_TEST":false,"RUN_CIT_TEST":true,"label":"os_install", "EXTRA_HW":""]
-ALL_TESTS["Install ESXI 6.0"]=["TEST_GROUP":"esxi-6-min-install.v2.0.test","RUN_FIT_TEST":false,"RUN_CIT_TEST":true,"label":"os_install", "EXTRA_HW":""]
-ALL_TESTS["Install Centos 6.5"]=["TEST_GROUP":"centos-6-5-minimal-install.v2.0.test","RUN_FIT_TEST":false,"RUN_CIT_TEST":true,"label":"os_install", "EXTRA_HW":""]
+ALL_TESTS["FIT"]=["TEST_GROUP":"-test tests -group smoke","RUN_FIT_TEST":true,"label":"smoke_test", "EXTRA_HW":"ucs"]
+ALL_TESTS["Install Ubuntu 14.04"]=["TEST_GROUP":"ubuntu-minimal-install.v2.0.test","RUN_FIT_TEST":false,"label":"os_install", "EXTRA_HW":""]
+ALL_TESTS["Install ESXI 6.0"]=["TEST_GROUP":"esxi-6-min-install.v2.0.test","RUN_FIT_TEST":false,"label":"os_install", "EXTRA_HW":""]
+ALL_TESTS["Install Centos 6.5"]=["TEST_GROUP":"centos-6-5-minimal-install.v2.0.test","RUN_FIT_TEST":false,"label":"os_install", "EXTRA_HW":""]
 
 String repo_dir
 String stash_manifest_name
@@ -35,7 +34,7 @@ def setDocker(String docker_stash_name, String docker_stash_path, String docker_
     this.docker_record_stash_path = docker_record_stash_path
 }
 
-def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean RUN_FIT_TEST, Boolean RUN_CIT_TEST, String repo_dir, String test_type, String test_stack, String extra_hw){
+def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean RUN_FIT_TEST, String repo_dir, String test_type, String test_stack, String extra_hw){
     def shareMethod = load(repo_dir + "/jobs/ShareMethod.groovy")
     lock(label:label_name,quantity:1){
         // Occupy an avaliable resource which contains the label
@@ -78,7 +77,6 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                 timestamps{
                     withEnv([
                         "TEST_GROUP=$TEST_GROUP",
-                        "RUN_CIT_TEST=$RUN_CIT_TEST",
                         "RUN_FIT_TEST=$RUN_FIT_TEST",
                         "SKIP_PREP_DEP=false",
                         "MANIFEST_FILE=${env.MANIFEST_FILE}",
@@ -209,7 +207,7 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                                 sh '''#!/bin/bash -x
                                 ./build-config/jobs/FunctionTest/cleanup.sh
                                 '''
-                                // The test_name is an argument of the method, for example: CIT
+                                // The test_name is an argument of the method, for example: FIT
                                 // It comes from the member variable: TESTS, for example: CIT.FIT
                                 // The function archiveArtifactsToTarget() will unstash the stashed files
                                 // according to the member variable: TESTS
@@ -232,7 +230,7 @@ def triggerTestsParallely(TESTS, test_type, repo_dir, test_stack){
     def RUN_TESTS_DICT=[:]
     // TESTS is a checkbox parameter.
     // Its value is a string looks like:
-    // CIT,FIT,Install Ubuntu 14.04,Install ESXI 6.0,Install Centos 6.5
+    // FIT,Install Ubuntu 14.04,Install ESXI 6.0,Install Centos 6.5
     List tests = Arrays.asList(TESTS.split(','))
     for(int i=0;i<tests.size();i++){
         TEST_NAME = tests[i]
@@ -248,10 +246,9 @@ def triggerTestsParallely(TESTS, test_type, repo_dir, test_stack){
         def label_name=RUN_TESTS_DICT[test_name]["label"]
         def test_group = RUN_TESTS_DICT[test_name]["TEST_GROUP"]
         def run_fit_test = RUN_TESTS_DICT[test_name]["RUN_FIT_TEST"]
-        def run_cit_test = RUN_TESTS_DICT[test_name]["RUN_CIT_TEST"]
         def extra_hw = RUN_TESTS_DICT[test_name]["EXTRA_HW"]
         test_branches[test_name] = {
-            functionTest(test_name,label_name,test_group, run_fit_test, run_cit_test, repo_dir, test_type, test_stack, extra_hw)
+            functionTest(test_name,label_name,test_group, run_fit_test, repo_dir, test_type, test_stack, extra_hw)
         }
     }
     if(test_branches.size() > 0){

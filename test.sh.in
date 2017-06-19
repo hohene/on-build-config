@@ -5,10 +5,6 @@ RUN_FIT_TEST="${RUN_FIT_TEST}"
 if [ ! -z "${4}" ]; then
   RUN_FIT_TEST=$4
 fi
-RUN_CIT_TEST="${RUN_CIT_TEST}"
-if [ ! -z "${5}" ]; then
-  RUN_FIT_TEST=$5
-fi
 MODIFY_API_PACKAGE="${MODIFY_API_PACKAGE}"
 
 cleanupVMs(){
@@ -285,20 +281,6 @@ runTests() {
      mkdir -p ${WORKSPACE}/xunit-reports
      cp *.xml ${WORKSPACE}/xunit-reports
   fi
-  if [ "$RUN_CIT_TEST" == true ] ; then
-     read array<<<"${TEST_GROUP}"
-     args=()
-     group=" --group="
-     for item in $array; do
-        args+="${group}${item}"
-     done
-     cp -f ${WORKSPACE}/build-config/config.ini ${WORKSPACE}/RackHD/test/config
-     cd ${WORKSPACE}/RackHD/test
-     RACKHD_BASE_REPO_URL=${BASE_REPO_URL} RACKHD_TEST_LOGLVL=INFO \
-     python run.py ${args} --with-xunit
-     mkdir -p ${WORKSPACE}/xunit-reports
-     cp *.xml ${WORKSPACE}/xunit-reports
-  fi
   set -e
 }
 
@@ -327,7 +309,7 @@ waitForAPI() {
 ######################################
 portForwarding(){
     # forward ova to localhost
-    # according to vagrant/mongo/config.json and cit/fit config
+    # according to vagrant/mongo/config.json and fit config
     socat TCP4-LISTEN:9091,forever,reuseaddr,fork TCP4:$1:5672 &
     socat TCP4-LISTEN:9090,forever,reuseaddr,fork TCP4:$1:8080 &
     socat TCP4-LISTEN:9092,forever,reuseaddr,fork TCP4:$1:9080 &
@@ -362,7 +344,7 @@ fetchOVALog(){
 #  OVA POST SMOKE TEST RELATED END   #
 ######################################
 
-if [ "$RUN_CIT_TEST" == true ] || [ "$RUN_FIT_TEST" == true ] ; then
+if [ "$RUN_FIT_TEST" == true ] ; then
   if [ "$TEST_TYPE" == "ova" ]; then
     # based on the assumption that in the same folder, the VMs has been exist normally. so don't destroy VM here.
     
