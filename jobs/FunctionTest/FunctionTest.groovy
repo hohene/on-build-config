@@ -3,7 +3,7 @@ import groovy.transform.Field;
 // The default test config: ALL_TESTS (a global variable)
 @Field def ALL_TESTS=[:]
 ALL_TESTS["FIT"]=["TEST_GROUP":"-test tests -group smoke","RUN_FIT_TEST":true,"RUN_CIT_TEST":false,"label":"smoke_test", "EXTRA_HW":"ucs"]
-ALL_TESTS["CIT"]=["TEST_GROUP":"smoke-tests","RUN_FIT_TEST":false,"RUN_CIT_TEST":true,"label":"smoke_test", "EXTRA_HW":""]
+ALL_TESTS["CIT"]=["TEST_GROUP":"smoke-tests","RUN_FIT_TEST":false,"RUN_CIT_TEST":false,"label":"smoke_test", "EXTRA_HW":""]
 ALL_TESTS["Install Ubuntu 14.04"]=["TEST_GROUP":"-test tests/bootstrap/test_api20_linux_bootstrap.py -extra install_ubuntu14.04_minimum.json","RUN_FIT_TEST":true,"RUN_CIT_TEST":false,"label":"os_install", "EXTRA_HW":""]
 ALL_TESTS["Install ESXI 6.0"]=["TEST_GROUP":"-test tests/bootstrap/test_api20_esxi_bootstrap.py -extra install_esxi6.0_minimum.json","RUN_FIT_TEST":true,"RUN_CIT_TEST":false,"label":"os_install", "EXTRA_HW":""]
 ALL_TESTS["Install Centos 6.5"]=["TEST_GROUP":"-test tests/bootstrap/test_api20_linux_bootstrap.py -extra install_centos65_minimum.json","RUN_FIT_TEST":true,"RUN_CIT_TEST":false,"label":"os_install", "EXTRA_HW":""]
@@ -79,6 +79,7 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                     withEnv([
                         "TEST_GROUP=$TEST_GROUP",
                         "RUN_CIT_TEST=$RUN_CIT_TEST",
+                        "RUN_CIT_TEST=false",
                         "RUN_FIT_TEST=$RUN_FIT_TEST",
                         "SKIP_PREP_DEP=false",
                         "MANIFEST_FILE=${env.MANIFEST_FILE}",
