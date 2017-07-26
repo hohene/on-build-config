@@ -152,6 +152,8 @@ do
     else
         server_password=${node_info[2]}
     fi
+    echo "User name: ", server_user_name
+    echo "User password: ", server_password
     ./scp_transfer.exp $server_ip $server_user_name $server_password $operation_file
     ./check_scp.exp $server_ip $server_user_name $server_password $operation_file > /dev/null 2>&1
     if [ $? -ne 0 ];then
