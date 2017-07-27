@@ -48,9 +48,9 @@ while [ ${timeout} -ne ${maxto} ]; do
         if [[ "${ip%%.*}" == "172" ]] && [[ "$handled_ip_list" != *"$ip"* ]]; then
             ping -c 1 -w 5 $ip 2>&1 > /dev/null
             if [ $? == 0 ]; then
-                echo "Find a pingable IP" $ip
+                # echo "Find a pingable IP" $ip
                 for bmc in $bmc_account_list; do
-                    echo "ipmi cmd: ipmitool -I lanplus -H $ip -U XXXXX -P XXXXX -R 1 -N 3 chassis power status"
+                    # echo "ipmi cmd: ipmitool -I lanplus -H $ip -U XXXXX -P XXXXX -R 1 -N 3 chassis power status"
                     ipmitool -I lanplus -H $ip -U ${bmc%:*} -P ${bmc#*:} -R 1 -N 3 chassis power status |grep on
                     if [ $? == 0 ]; then
                         echo "Find a vNode IP": $ip
