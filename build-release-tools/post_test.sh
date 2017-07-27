@@ -201,6 +201,8 @@ waitForAPI() {
         case $type in
           ova)
            # ova Northbound Port default to 8080, but it should be reached via ansible to OVA VM's IP
+           echo "sleeping for 30"
+           sleep 30
            findRackHDService 1 1  localhost:8080/api/2.0/nodes
            ;;
           docker)
