@@ -109,9 +109,9 @@ def functionTest(String test_name, String label_name, String TEST_GROUP, Boolean
                                 if (test_type != "manifest") {
                                     def exists = fileExists 'RackHD'
                                     if( !exists ){
-                                        echo "Checkout RackHD for un-src test."
+                                        echo "Checkout RackHD test branch for un-src test."
                                         def url = "https://github.com/hohene/RackHD.git"
-                                        def branch = "eh-stack-init-test"
+                                        def branch = "eh-ova-test1"
                                         def targetDir = "RackHD"
                                         env.RackHD_DIR = targetDir
                                         shareMethod.checkout(url, branch, targetDir)
