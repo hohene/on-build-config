@@ -2,8 +2,11 @@ import groovy.transform.Field;
 
 // The default test config: ALL_TESTS (a global variable)
 @Field def ALL_TESTS = [:]
+
 ALL_TESTS["FIT"]=["TEST_GROUP":"-test tests -group smoke","label":"smoke_test", "EXTRA_HW":""]
-ALL_TESTS["Install Ubuntu 14.04"]=["TEST_GROUP":"-test tests/bootstrap/pr_gate_os_install.py","label":"os_install", "EXTRA_HW":""]
+ALL_TESTS["OS_INSTALL"]=["TEST_GROUP":"-test tests/bootstrap/pr_gate_os_install.py","label":"os_install", "EXTRA_HW":""]
+ALL_TESTS["OTHER"]=["TEST_GROUP":,"-test tests -group smoke", "label":"smoke_test", "EXTRA_HW":""]
+
 // ALL_TESTS["Install Ubuntu 14.04"]=["TEST_GROUP":"-test tests/bootstrap/test_api20_linux_bootstrap.py -extra install_ubuntu14.04_minimum.json","label":"os_install", "EXTRA_HW":""]
 // ALL_TESTS["Install ESXI 6.0"]=["TEST_GROUP":"-test tests/bootstrap/test_api20_esxi_bootstrap.py -extra install_esxi6.0_minimum.json","label":"os_install", "EXTRA_HW":""]
 // ALL_TESTS["Install Centos 6.5"]=["TEST_GROUP":"-test tests/bootstrap/test_api20_linux_bootstrap.py -extra install_centos65_minimum.json","label":"os_install", "EXTRA_HW":""]
@@ -23,6 +26,8 @@ def functionTest(String test_name, String test_type, String TEST_GROUP, String t
         "API_PACKAGE_LIST=on-http-api2.0 on-http-redfish-1.0",
         "USE_VCOMPUTE=${env.USE_VCOMPUTE}",
         "TEST_GROUP=$TEST_GROUP",
+	"TEST_GROUP_OTHER"=${env.TEST_GROUP_OTHER},
+	"TEST_STACK_OTHER"=${env.TEST_STACK_OTHER},
         "NODE_NAME=${env.NODE_NAME}",
         "TEST_STACK=$test_stack",
         "EXTRA_HW=$extra_hw",
@@ -49,6 +54,21 @@ def functionTest(String test_name, String test_type, String TEST_GROUP, String t
             string(credentialsId: 'BASE_REPO_URL', variable: 'BASE_REPO_URL')
         ]) {
             try{
+                // OTHER is for the jenkins user to pass in a different test group and stack to run
+                echo "test_name: ${test_name}"
+                if ("${test_name}" == "OTHER"){
+                    if ("${TEST_GROUP_OTHER}" != null){
+                        TEST_GROUP=${TEST_GROUP_OTHER}
+                    } else {
+		        error("ERROR: The test group OTHER was selected with no TEST_GROUP defined")
+		    }
+                    if ("${TEST_STACK_OTHER}" != null){
+                        TEST_STACK=${TEST_GROUP_OTHER}
+		    }
+                }
+		echo "TEST_GROUP: ${TEST_GROUP}"
+		echo "TEST_STACK: ${TEST_STACK}"
+		
                 timeout(90){
                     // run test script
                     sh '''#!/bin/bash -x

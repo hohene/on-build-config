@@ -283,10 +283,11 @@ fitSmokeTest()
         collectTestReport
         exit 1
     fi
-    echo "########### Run FIT Smoke Test #############"
+    echo "########### Run Tests #############"
+    echo "Running tests ${TEST_GROUP} on Stack ${tstack}, args ${args}"
     python run_tests.py ${TEST_GROUP} ${tstack} ${args} -v 4 -xunit
     if [ $? -ne 0 ]; then
-        echo "Test FIT failed running smoke test"
+        echo "Test run_tests.py ${TEST_GROUP} ${tstack} failed"
         collectTestReport
         exit 1
     fi
