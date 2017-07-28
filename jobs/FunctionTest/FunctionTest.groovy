@@ -5,7 +5,7 @@ import groovy.transform.Field;
 
 ALL_TESTS["FIT"]=["TEST_GROUP":"-test tests -group smoke","label":"smoke_test", "EXTRA_HW":""]
 ALL_TESTS["OS_INSTALL"]=["TEST_GROUP":"-test tests/bootstrap/pr_gate_os_install.py","label":"os_install", "EXTRA_HW":""]
-ALL_TESTS["OTHER"]=["TEST_GROUP":,"-test tests -group smoke", "label":"smoke_test", "EXTRA_HW":""]
+ALL_TESTS["OTHER"]=["TEST_GROUP":"-test tests -group smoke", "label":"smoke_test", "EXTRA_HW":""]
 
 // ALL_TESTS["Install Ubuntu 14.04"]=["TEST_GROUP":"-test tests/bootstrap/test_api20_linux_bootstrap.py -extra install_ubuntu14.04_minimum.json","label":"os_install", "EXTRA_HW":""]
 // ALL_TESTS["Install ESXI 6.0"]=["TEST_GROUP":"-test tests/bootstrap/test_api20_esxi_bootstrap.py -extra install_esxi6.0_minimum.json","label":"os_install", "EXTRA_HW":""]
