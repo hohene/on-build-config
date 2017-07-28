@@ -299,7 +299,8 @@ fitSmokeTest()
 exportLog(){
     set +e
     mkdir -p ${WORKSPACE}/build-log   
-    vnc_record_stop
+    # EH - turn off vnc_record for test jenkins
+    # vnc_record_stop
     generateSolLogStop
     generateRackHDLog
     generateMongoLog
@@ -363,7 +364,8 @@ exportLog(){
     nodesOn &
 
     generateSolLog
-    vnc_record_start
+    # EH - turn off vnc_record for test jenkins
+    # vnc_record_start
     # Run tests
     runTests
     # exit venv
@@ -387,7 +389,8 @@ exportLog(){
     nodesOn
 
     generateSolLog
-    vnc_record_start
+    # EH - turn off vnc_record for test jenkins
+    # vnc_record_start
     # Run tests
     runTests " --sm-amqp-use-user guest"
   fi
