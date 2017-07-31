@@ -16,7 +16,14 @@ def generateTestBranches(function_test){
         List docker_tests_group = Arrays.asList(DOCKER_TESTS.split(','))
         for(int i=0; i<docker_tests_group.size(); i++){
             def test_name = docker_tests_group[i]
-            def label_name=ALL_TESTS[test_name]["label"]
+            echo "**** Test Name: ${test_name}"
+            // check for a tag in jenkins that doesn't exist in all-tests, skip if found
+            try {
+                def label_name=ALL_TESTS[test_name]["label"]
+            } catch (error) {
+                echo "test tag: ${test_name} not in array, skipping group"
+                continue
+            }
             def test_group = ALL_TESTS[test_name]["TEST_GROUP"]
             def extra_hw = ALL_TESTS[test_name]["EXTRA_HW"]
             test_branches["docker $test_name"] = {
