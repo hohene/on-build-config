@@ -22,7 +22,7 @@ def generateTestBranches(function_test){
                 def label_name=ALL_TESTS[test_name]["label"]
             } catch (error) {
                 echo "test tag: ${test_name} not in array, skipping group"
-                continue
+                continue;
             }
             def test_group = ALL_TESTS[test_name]["TEST_GROUP"]
             def extra_hw = ALL_TESTS[test_name]["EXTRA_HW"]
