@@ -1,7 +1,7 @@
 import groovy.transform.Field;
 
 @Field def TEST_TYPE = "docker"
-String DOCKER_TESTS_NEW = ""
+@Field def DOCKER_TESTS_NEW = ""
 def generateTestBranches(function_test){
     def test_branches = [:]
     node{
