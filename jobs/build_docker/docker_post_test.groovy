@@ -1,7 +1,7 @@
 import groovy.transform.Field;
 
 @Field def TEST_TYPE = "docker"
-
+String DOCKER_TESTS_NEW = ""
 def generateTestBranches(function_test){
     def test_branches = [:]
     node{
@@ -13,6 +13,7 @@ def generateTestBranches(function_test){
 
         def DOCKER_TESTS = "${env.DOCKER_POST_TESTS}"
         def docker_test_stack = "-stack docker"
+        echo "DOCKER_TESTS string: ${DOCKER_TESTS}"
         List docker_tests_group = Arrays.asList(DOCKER_TESTS.split(','))
         for(int i=0; i<docker_tests_group.size(); i++){
             def test_name = docker_tests_group[i]
@@ -24,6 +25,9 @@ def generateTestBranches(function_test){
                 echo "test tag: ${test_name} not in array, skipping group"
                 continue;
             }
+            echo "Continue with test ${test_name}"
+            DOCKER_TESTS_NEW += "${test_name}, "
+            echo "Docker tests new: ${DOCKER_TESTS_NEW}"
             def test_group = ALL_TESTS[test_name]["TEST_GROUP"]
             def extra_hw = ALL_TESTS[test_name]["EXTRA_HW"]
             test_branches["docker $test_name"] = {
@@ -129,7 +133,8 @@ def runTests(function_test){
 }
 
 def archiveArtifacts(function_test){
-    def DOCKER_TESTS = "${env.DOCKER_POST_TESTS}"
+    //def DOCKER_TESTS = "${env.DOCKER_POST_TESTS}"
+    def DOCKER_TESTS = "${DOCKER_TESTS_NEW}"
     function_test.archiveArtifactsToTarget("DOCKER_POST_SMOKE_TEST", DOCKER_TESTS, TEST_TYPE)
 }
 
