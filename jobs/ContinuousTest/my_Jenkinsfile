@@ -51,18 +51,15 @@ node{
                 env.stash_manifest_name = 'manifest'
                 env.stash_manifest_path = "${props.manifest_name}"
             }
-            stage("Test"){
+            stage("Test MN"){
                 // Start to run test
                 def test_type = "manifest"
                 def TESTS = "${env.TESTS}"
                 def repo_dir = pwd() + "/build-config"
                 def function_test = load("build-config/jobs/FunctionTest/FunctionTest.groovy")
                 def source_based_test = load("build-config/jobs/FunctionTest/SourceBasedTest.groovy")
-                try{
-                    source_based_test.runTests(function_test)
-                // } finally{
-                //      source_based_test.archiveArtifacts(function_test)
-                }
+
+                source_based_test.runTests(function_test)
             }
             currentBuild.result="SUCCESS"
         } finally{
