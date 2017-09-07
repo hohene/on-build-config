@@ -89,17 +89,22 @@ dlTftpFiles() {
   mkdir -p ${dir} && cd ${dir}
   if [ -n "${INTERNAL_TFTP_ZIP_FILE_URL}" ]; then
     # use INTERNAL TEMP SOURCE
+    echo "EH: Inside dlTftp Internal temp source"
+    echo "TFTP site: ${INTERNAL_TFTP_ZIP_FILE_URL}"
     wget_download ${INTERNAL_TFTP_ZIP_FILE_URL}
     unzip pxe.zip && mv pxe/* . && rm -rf pxe pxe.zip
   else
     # pull down index from bintray repo and parse files from index
+    echo "EH: Inside dlTftp bintray get" 
     wget_download --no-check-certificate https://dl.bintray.com/rackhd/binary/ipxe/ && \
         exec  cat index.html |grep -o href=.*\"|sed 's/href=//' | sed 's/"//g' > files
     for i in `cat ./files`; do
+      echo "EH: file ${i}" 
       wget_download --no-check-certificate https://dl.bintray.com/rackhd/binary/ipxe/${i}
     done
     # attempt to pull down user specified static files
     for i in ${TFTP_STATIC_FILES}; do
+      echo "EH: file static ${i}" 
       wget_download --no-check-certificate https://bintray.com/artifact/download/rackhd/binary/ipxe/${i}
     done
   fi
@@ -151,6 +156,7 @@ preparePackages() {
 prepareDeps(){
   preparePackages
   dlTftpFiles
+  echo "After dltftp files"
   dlHttpFiles
 }
 
