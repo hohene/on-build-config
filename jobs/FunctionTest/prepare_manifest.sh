@@ -155,9 +155,9 @@ preparePackages() {
 
 prepareDeps(){
   preparePackages
-  dlTftpFiles
+  # dlTftpFiles
   echo "After dltftp files"
-  dlHttpFiles
+  # dlHttpFiles
 }
 
 if [ "$SKIP_PREP_DEP" == false ] ; then
