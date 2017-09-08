@@ -56,9 +56,11 @@ node{
                 def test_type = "manifest"
                 def TESTS = "${env.TESTS}"
                 def repo_dir = pwd() + "/build-config"
+                echo "EH: Calling Function Test groovy"
                 def function_test = load("build-config/jobs/FunctionTest/FunctionTest.groovy")
+                echo "EH: Calling SourceBasedTest.groovy"
                 def source_based_test = load("build-config/jobs/FunctionTest/SourceBasedTest.groovy")
-
+                echo "EH: Run Tests"
                 source_based_test.runTests(function_test)
             }
             currentBuild.result="SUCCESS"
