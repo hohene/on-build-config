@@ -26,7 +26,6 @@ if [ ! -z "${2}" ]; then
   TFTP_STATIC_FILES=$2
 fi
 SKIP_PREP_DEP="${SKIP_PREP_DEP}"
-SKIP_PREP_DEP=true
 if [ ! -z "${3}" ]; then
   SKIP_PREP_DEP=$3
 fi
